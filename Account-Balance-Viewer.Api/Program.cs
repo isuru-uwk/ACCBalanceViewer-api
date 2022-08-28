@@ -3,7 +3,6 @@ using Account_Balance_Viewer.Core.Interfaces;
 using Account_Balance_Viewer.Core.Repositories;
 using Account_Balance_Viewer.Core.Services;
 using Account_Balance_Viewer.Data.Models;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;

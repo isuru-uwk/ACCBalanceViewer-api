@@ -1,9 +1,4 @@
 ﻿using Account_Balance_Viewer.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Account_Balance_Viewer.Core.Interfaces;
 using Account_Balance_Viewer.Core.Repositories;
 

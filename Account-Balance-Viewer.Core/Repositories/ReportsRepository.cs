@@ -1,11 +1,6 @@
-﻿using Account_Balance_Viewer.Core.Interfaces;
+﻿using Account_Balance_Viewer.Common.ViewModels;
+using Account_Balance_Viewer.Core.Interfaces;
 using Account_Balance_Viewer.Data.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Account_Balance_Viewer.Core.Repositories
 {
@@ -15,10 +10,10 @@ namespace Account_Balance_Viewer.Core.Repositories
         {
 
         }
-        public async Task<Report> GetCumulativeBalanceReportByMonthAndYear(int month, int year)
+        public async Task<ReportViewModel> GetCumulativeBalanceReportByMonthAndYear(int month, int year)
         {
-            var allReports = ApplicationDbContext.Reports.Where(r => r.Month <= month && r.Year == year);
-            var cumulativeBalanceReport = new Report();
+            var allReports = ApplicationDbContext.Reports.Where(r => r.Month <= month && r.Year == year).GroupBy(r => r.Month).Select(r => r.OrderByDescending(r => r.CreatedDate).FirstOrDefault()).ToList();
+            var cumulativeBalanceReport = new ReportViewModel();
 
             foreach (var report in allReports)
             {

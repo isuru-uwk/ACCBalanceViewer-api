@@ -1,4 +1,4 @@
-﻿namespace Account_Balance_Viewer.Api.ViewModels
+﻿namespace Account_Balance_Viewer.Common.ViewModels
 {
     public class ReportViewModel
     {

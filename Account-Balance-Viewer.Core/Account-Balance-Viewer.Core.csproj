@@ -10,10 +10,10 @@
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="6.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
-    <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1001" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Account-Balance-Viewer.Common\Account-Balance-Viewer.Common.csproj" />
     <ProjectReference Include="..\Account-Balance-Viewer.Data\Account-Balance-Viewer.Data.csproj" />
   </ItemGroup>
 

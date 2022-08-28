@@ -1,6 +1,7 @@
 ﻿using Account_Balance_Viewer.Core.Interfaces;
 using Account_Balance_Viewer.Core.Services;
 using Account_Balance_Viewer.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.InteropServices;
 using Excel = Microsoft.Office.Interop.Excel;
@@ -23,8 +24,15 @@ namespace Account_Balance_Viewer.Api.Controllers
         }
 
         [HttpGet("cumulative/{year}/{month}")]
-        public async Task<IActionResult> GetLatestAccountBalanceReport(int month, int year)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> GetCumulativeAccountBalanceReport(int month, int year)
         {
+            if (!User.Identity.IsAuthenticated)
+                return StatusCode(StatusCodes.Status401Unauthorized);
             try
             {
                 var result = await this._unit.Reports.GetCumulativeBalanceReportByMonthAndYear(month, year);
@@ -43,6 +51,9 @@ namespace Account_Balance_Viewer.Api.Controllers
         [Consumes("multipart/form-data")]
         [RequestSizeLimit(50 * 1024 * 1024)]
         [RequestFormLimits(MultipartBodyLengthLimit = 50 * 1024 * 1024)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> AddReport(
             [FromForm] string year,
             [FromForm] string month,
@@ -74,6 +85,34 @@ namespace Account_Balance_Viewer.Api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IEnumerable<Report>>> GetAllAccountBalanceReports()
+        {
+            try
+            {
+                var result = await this._unit.Reports.GetAllAsync();
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return NotFound(result);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+
+        }
+
 
     }
 }
